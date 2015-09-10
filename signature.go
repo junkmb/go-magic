@@ -2,7 +2,6 @@ package magic
 
 import (
 	"bytes"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -115,12 +114,10 @@ defLoop:
 	for _, d := range definitions {
 		for _, s := range d.signatures {
 			sigLen := len(s.b)
-			// fmt.Println(d.extension, s.offset, s.b, b[s.offset:s.offset+sigLen])
 			if len(b) < s.offset+sigLen || !bytes.Equal(b[s.offset:s.offset+sigLen], s.b) {
 				continue defLoop
 			}
 		}
-		fmt.Printf("extension: %s\nsignature: %s\n", d.extension, d.signatures[0].bytes)
 		return d.extension
 	}
 	return ""
