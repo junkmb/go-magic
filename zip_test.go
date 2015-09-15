@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDetectZipExtention(t *testing.T) {
+func TestDetectZipExtension(t *testing.T) {
 	d, err := ioutil.ReadDir(sampleDir)
 	if err != nil {
 		panic(err)

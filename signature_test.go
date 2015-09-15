@@ -11,7 +11,7 @@ import (
 
 var sampleDir = "./testdata"
 
-func TestDetectExtention(t *testing.T) {
+func TestDetectExtension(t *testing.T) {
 	d, err := ioutil.ReadDir(sampleDir)
 	if err != nil {
 		panic(err)
@@ -32,7 +32,7 @@ func TestDetectExtention(t *testing.T) {
 			sampleExt = ""
 		default:
 		}
-		ext := DetectExtention(b)
+		ext := DetectExtension(b)
 		t.Log(f.Name(), ext)
 
 		assert.Equal(t, sampleExt, ext)
