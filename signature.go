@@ -1,7 +1,6 @@
 package magic
 
 import (
-	"bytes"
 	"strconv"
 	"strings"
 )
@@ -90,7 +89,7 @@ type Definition struct {
 	Signatures []*Signature
 }
 
-func (d *Definition) parse() error {
+func (d *Definition) Parse() error {
 	for _, s := range d.Signatures {
 		if err := s.parse(); err != nil {
 			return err
@@ -119,17 +118,7 @@ func (s *Signature) parse() error {
 }
 
 func DetectExtension(b []byte) string {
-defLoop:
-	for _, d := range Definitions {
-		for _, s := range d.Signatures {
-			sigLen := len(s.b)
-			if len(b) < s.Offset+sigLen || !bytes.Equal(b[s.Offset:s.Offset+sigLen], s.b) {
-				continue defLoop
-			}
-		}
-		return d.Extension
-	}
-	return ""
+	return NODE.Match(b)
 }
 
 func DetectMIME(b []byte) string {
@@ -141,9 +130,11 @@ func DetectMIME(b []byte) string {
 }
 
 func init() {
+	NODE = &Node{}
 	for _, d := range Definitions {
-		if err := d.parse(); err != nil {
+		if err := d.Parse(); err != nil {
 			panic(err)
 		}
+		NODE.Insert(d)
 	}
 }
