@@ -55,7 +55,7 @@ func (n *Node) Insert(d *Definition) {
 
 		// Add a child
 		if i < len(d.Signatures[0].b) {
-			child := n.findChildBySignature(d.Signatures[0])
+			child := n.findChild(d.Signatures[0])
 			if child == nil {
 				d.Signatures[0].b = d.Signatures[0].b[i:]
 				d.Signatures[0].Offset += i
@@ -69,7 +69,7 @@ func (n *Node) Insert(d *Definition) {
 				return
 			}
 			d.Signatures = d.Signatures[1:]
-			child := n.findChildBySignature(d.Signatures[0])
+			child := n.findChild(d.Signatures[0])
 			if child == nil {
 				child = &Node{Offset: d.Signatures[0].Offset}
 				n.Children = append(n.Children, child)
@@ -90,9 +90,8 @@ func (n *Node) match(b []byte) (Extension string) {
 
 	for _, child := range n.Children {
 		offset := child.Offset - n.Offset
-		child := n.findChild(b)
-		if child == nil {
-			return n.Extension
+		if len(b) < offset+len(child.Signature) || b[offset] != child.Signature[0] {
+			continue
 		}
 		Extension = child.match(b[offset:])
 		if Extension != "" {
@@ -113,17 +112,7 @@ func (n *Node) commonLength(b []byte) (i int) {
 	return
 }
 
-func (n *Node) findChild(b []byte) *Node {
-	for _, child := range n.Children {
-		offset := child.Offset - n.Offset
-		if len(b) >= offset+len(child.Signature) && b[offset] == child.Signature[0] {
-			return child
-		}
-	}
-	return nil
-}
-
-func (n *Node) findChildBySignature(s *Signature) *Node {
+func (n *Node) findChild(s *Signature) *Node {
 	for _, child := range n.Children {
 		if child.Offset == s.Offset && child.Signature[0] == s.b[0] {
 			return child
