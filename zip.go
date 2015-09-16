@@ -37,6 +37,14 @@ func DetectZipExtension(reader io.ReaderAt, length int64) (string, error) {
 	return "zip", nil
 }
 
+func DetectZipMIME(reader io.ReaderAt, length int64) (string, error) {
+	ext, err := DetectZipExtension(reader, length)
+	if err != nil {
+		return "", err
+	}
+	return MIMEMap[ext], nil
+}
+
 func detectOfficeX(r io.Reader) string {
 	b, err := ioutil.ReadAll(r)
 	if err != nil {
