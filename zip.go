@@ -60,17 +60,19 @@ func detectOfficeX(r io.Reader) string {
 		return ""
 	}
 
-	pnFactors := strings.Split(o.Overrides[0].PartName, "/")
-	if len(pnFactors) < 2 {
-		return ""
-	}
-	switch pnFactors[1] {
-	case "word":
-		return "docx"
-	case "xl":
-		return "xlsx"
-	case "ppt":
-		return "pptx"
+	for _, override := range o.Overrides {
+		pnFactors := strings.Split(override.PartName, "/")
+		if len(pnFactors) < 2 {
+			return ""
+		}
+		switch pnFactors[1] {
+		case "word":
+			return "docx"
+		case "xl":
+			return "xlsx"
+		case "ppt":
+			return "pptx"
+		}
 	}
 	return ""
 
