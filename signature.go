@@ -129,7 +129,6 @@ var Definitions = []*Definition{
 	{"flv", []*Signature{{Bytes: "46 4C 56 01"}}},
 	{"rtf", []*Signature{{Bytes: "7B 5C 72 74 66 31"}}},
 	{"iso", []*Signature{{Bytes: "43 44 30 30 31"}}},
-	{"msi", []*Signature{{Bytes: "23 20"}}},
 	{"vmdk", []*Signature{{Bytes: "23 20 44 69 73 6B 20 44 65 73 63 72 69 70 74 6F"}}},
 	{"vmdk", []*Signature{{Bytes: "43 4F 57 44"}}},
 	{"vmdk", []*Signature{{Bytes: "4B 44 4D"}}},
@@ -227,6 +226,7 @@ var Definitions = []*Definition{
 	{"ain", []*Signature{{Bytes: "21 12"}}},
 	{"lib", []*Signature{{Bytes: "21 3C 61 72 63 68 3E 0A"}}},
 	{"ost", []*Signature{{Bytes: "21 42 44 4E"}}}, // pst
+	// {"msi", []*Signature{{Bytes: "23 20"}}}, // Too wide hit range (e.g. .py)
 	{"dsp", []*Signature{{Bytes: "23 20 4D 69 63 72 6F 73 6F 66 74 20 44 65 76 65 6C 6F 70 65 72 20 53 74 75 64 69 6F"}}},
 	{"amr", []*Signature{{Bytes: "23 21 41 4D 52"}}},
 	{"sil", []*Signature{{Bytes: "23 21 53 49 4C 4B 0A"}}},
