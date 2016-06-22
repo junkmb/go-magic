@@ -80,8 +80,7 @@ var Definitions = []*Definition{
 	{"zip", []*Signature{{Bytes: "50 4B 07 08"}}},
 	{"zip", []*Signature{{Offset: 30, Bytes: "50 4B 4C 49 54 45"}}},
 	{"zip", []*Signature{{Offset: 526, Bytes: "50 4B 53 70 58"}}},
-	{"zip", []*Signature{{Offset: 29, Bytes: "57 69 6E 5A 69 70"}}},
-	{"zip", []*Signature{{Offset: 152, Bytes: "57 69 6E 5A 69 70"}}},
+	{"zip", []*Signature{{Offset: 29152, Bytes: "57 69 6E 5A 69 70"}}},
 	{"tar.z", []*Signature{{Bytes: "1F 9D"}}},
 	{"tar.z", []*Signature{{Bytes: "1F A0"}}},
 	{"gz", []*Signature{{Bytes: "1F 8B 08"}}}, // tgz, vlt
