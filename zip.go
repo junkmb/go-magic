@@ -11,7 +11,8 @@ import (
 type DetectionFunc func(io.Reader) string
 
 var zipDetectionMap = map[string]DetectionFunc{
-	"[Content_Types].xml": detectOfficeX,
+	"[Content_Types].xml":  detectOfficeX,
+	"META-INF/MANIFEST.MF": detectJAR,
 }
 
 func DetectZipExtension(reader io.ReaderAt, length int64) (string, error) {
@@ -43,6 +44,10 @@ func DetectZipMIME(reader io.ReaderAt, length int64) (string, error) {
 		return "", err
 	}
 	return MIMEMap[ext], nil
+}
+
+func detectJAR(r io.Reader) string {
+	return "jar"
 }
 
 func detectOfficeX(r io.Reader) string {

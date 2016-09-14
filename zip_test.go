@@ -20,7 +20,7 @@ func TestDetectZipExtension(t *testing.T) {
 		fnameFactor := strings.Split(f.Name(), ".")
 		sampleExt := fnameFactor[len(fnameFactor)-1]
 		switch sampleExt {
-		case "zip", "docx", "xlsx", "pptx":
+		case "zip", "docx", "xlsx", "pptx", "jar":
 		default:
 			continue
 		}

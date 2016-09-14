@@ -94,6 +94,8 @@ var Definitions = []*Definition{
 	{"jar", []*Signature{{Bytes: "4A 41 52 43 53 00"}}},
 	{"jar", []*Signature{{Bytes: "50 4B 03 04 14 00 08 00 08 00"}}},
 	{"jar", []*Signature{{Bytes: "5F 27 A8 89"}}},
+	{"jar", []*Signature{{Bytes: "CA FE D0 0D"}}},
+	{"jar", []*Signature{{Offset: 14, Bytes: "1A 4A 61 72 1B"}}},
 	{"com", []*Signature{{Bytes: "E8"}}}, // sys
 	{"com", []*Signature{{Bytes: "E9"}}}, // sys
 	{"com", []*Signature{{Bytes: "EB"}}}, // sys

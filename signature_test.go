@@ -18,6 +18,9 @@ func TestDetectExtension(t *testing.T) {
 	}
 
 	for _, f := range d {
+		if !f.Mode().IsRegular() {
+			continue
+		}
 		b, err := ioutil.ReadFile(path.Join(sampleDir, f.Name()))
 		if err != nil {
 			panic(err)
@@ -26,7 +29,7 @@ func TestDetectExtension(t *testing.T) {
 		fnameFactor := strings.Split(f.Name(), ".")
 		sampleExt := fnameFactor[len(fnameFactor)-1]
 		switch sampleExt {
-		case "docx", "xlsx", "pptx":
+		case "docx", "xlsx", "pptx", "jar":
 			sampleExt = "zip"
 		case "txt":
 			sampleExt = ""
