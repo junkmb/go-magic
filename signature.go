@@ -204,10 +204,10 @@ var Definitions = []*Definition{
 	{"", []*Signature{{Bytes: "37 E4 53 96 C9 DB D6 07"}}},
 	{"psd", []*Signature{{Bytes: "38 42 50 53"}}},
 	{"sle", []*Signature{{Bytes: "3A 56 45 52 53 49 4F 4E"}}},
-	{"asx", []*Signature{{Bytes: "3C"}}}, // xdr
-	{"dci", []*Signature{{Bytes: "3C 21 64 6F 63 74 79 70"}}},
-	{"manifest", []*Signature{{Bytes: "3C 3F 78 6D 6C 20 76 65 72 73 69 6F 6E 3D"}}},
-	{"xul", []*Signature{{Bytes: "3C 3F 78 6D 6C 20 76 65 72 73 69 6F 6E 3D 22 31 2E 30 22 3F 3E"}}},
+	// {"asx", []*Signature{{Bytes: "3C"}}}, // xdr // Too wide hit range (e.g. .xml)
+	// {"dci", []*Signature{{Bytes: "3C 21 64 6F 63 74 79 70"}}}, // Too wide hit range
+	// {"manifest", []*Signature{{Bytes: "3C 3F 78 6D 6C 20 76 65 72 73 69 6F 6E 3D"}}}, // Too wide hit range (e.g. xml)
+	// {"xul", []*Signature{{Bytes: "3C 3F 78 6D 6C 20 76 65 72 73 69 6F 6E 3D 22 31 2E 30 22 3F 3E"}}}, // Too wide hit range (e.g. xml)
 	{"msc", []*Signature{{Bytes: "3C 3F 78 6D 6C 20 76 65 72 73 69 6F 6E 3D 22 31 2E 30 22 3F 3E 0D 0A 3C 4D 4D 43 5F 43 6F 6E 73 6F 6C 65 46 69 6C 65 20 43 6F 6E 73 6F 6C 65 56 65 72 73 69 6F 6E 3D 22"}}},
 	{"csd", []*Signature{{Bytes: "3C 43 73 6F 75 6E 64 53 79 6E 74 68 65 73 69 7A"}}},
 	{"mif", []*Signature{{Bytes: "3C 4D 61 6B 65 72 46 69 6C 65 20"}}}, // fm
