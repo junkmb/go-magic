@@ -133,7 +133,8 @@ func copySignatures(src []*Signature) (dst []*Signature) {
 	for i, s := range src {
 		dst[i] = &Signature{
 			Offset: s.Offset,
-			Bytes:  s.Bytes,
+			HEX:    s.HEX,
+			String: s.String,
 			b:      s.b,
 		}
 	}
