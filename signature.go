@@ -1,7 +1,7 @@
 package magic
 
 import (
-	"fmt"
+	"bytes"
 	"strconv"
 	"strings"
 )
@@ -50,10 +50,12 @@ var MIMEMap = map[string]string{
 	"flv":   "video/x-flv",
 	"iso":   "application/x-iso9660-image",
 	"dmg":   "application/x-apple-diskimage",
+	"html":  "text/html",
+	"xml":   "application/xml",
 }
 
-// This definition according to http://www.garykessler.net/library/file_sigs.html
 var Definitions = []*Definition{
+	// This definition according to http://www.garykessler.net/library/file_sigs.html
 	{"pic", []*Signature{{HEX: "00"}}}, // mov, pif, sea, ytr
 	{"xxx", []*Signature{{HEX: "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"}}},
 	{"pdb", []*Signature{{Offset: 11, HEX: "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"}}},
@@ -635,6 +637,45 @@ var Definitions = []*Definition{
 	{"sys", []*Signature{{HEX: "FF FF FF FF"}}},
 }
 
+var DefinitionsForText = []*Definition{
+	// This definition according to https://golang.org/pkg/net/http/#DetectContentType
+	{"html", []*Signature{{String: "<!DOCTYPE HTML "}}},
+	{"html", []*Signature{{String: "<HTML "}}},
+	{"html", []*Signature{{String: "<HEAD "}}},
+	{"html", []*Signature{{String: "<SCRIPT "}}},
+	{"html", []*Signature{{String: "<IFRAME "}}},
+	{"html", []*Signature{{String: "<H1 "}}},
+	{"html", []*Signature{{String: "<DIV "}}},
+	{"html", []*Signature{{String: "<FONT "}}},
+	{"html", []*Signature{{String: "<TABLE "}}},
+	{"html", []*Signature{{String: "<A "}}},
+	{"html", []*Signature{{String: "<STYLE "}}},
+	{"html", []*Signature{{String: "<TITLE "}}},
+	{"html", []*Signature{{String: "<B "}}},
+	{"html", []*Signature{{String: "<BODY "}}},
+	{"html", []*Signature{{String: "<BR "}}},
+	{"html", []*Signature{{String: "<P "}}},
+	{"html", []*Signature{{String: "<!-- "}}},
+	{"html", []*Signature{{String: "<!DOCTYPE HTML>"}}},
+	{"html", []*Signature{{String: "<HTML>"}}},
+	{"html", []*Signature{{String: "<HEAD>"}}},
+	{"html", []*Signature{{String: "<SCRIPT>"}}},
+	{"html", []*Signature{{String: "<IFRAME>"}}},
+	{"html", []*Signature{{String: "<H1>"}}},
+	{"html", []*Signature{{String: "<DIV>"}}},
+	{"html", []*Signature{{String: "<FONT>"}}},
+	{"html", []*Signature{{String: "<TABLE>"}}},
+	{"html", []*Signature{{String: "<A>"}}},
+	{"html", []*Signature{{String: "<STYLE>"}}},
+	{"html", []*Signature{{String: "<TITLE>"}}},
+	{"html", []*Signature{{String: "<B>"}}},
+	{"html", []*Signature{{String: "<BODY>"}}},
+	{"html", []*Signature{{String: "<BR>"}}},
+	{"html", []*Signature{{String: "<P>"}}},
+	{"html", []*Signature{{String: "<!-->"}}},
+	{"xml", []*Signature{{String: "<?XML"}}},
+}
+
 type Definition struct {
 	Extension  string
 	Signatures []*Signature
@@ -643,7 +684,6 @@ type Definition struct {
 func (d *Definition) Parse() error {
 	for _, s := range d.Signatures {
 		if err := s.parse(); err != nil {
-			fmt.Println(d.Extension)
 			return err
 		}
 	}
@@ -682,7 +722,15 @@ func (s *Signature) parseHEX() error {
 }
 
 func DetectExtension(b []byte) string {
-	return NODE.Match(b)
+	if ext := NODE.Match(b); ext != "" {
+		return ext
+	}
+	return DetectTextExtension(b)
+}
+
+func DetectTextExtension(b []byte) string {
+	b = bytes.TrimLeft(b, "\t\n\x0c\r ")
+	return NODEForText.Match(b)
 }
 
 func DetectMIME(b []byte) string {
@@ -694,11 +742,18 @@ func DetectMIME(b []byte) string {
 }
 
 func init() {
-	NODE = &Node{}
+	NODE = NewNode(false)
 	for _, d := range Definitions {
 		if err := d.Parse(); err != nil {
 			panic(err)
 		}
 		NODE.Insert(d)
+	}
+	NODEForText = NewNode(true)
+	for _, d := range DefinitionsForText {
+		if err := d.Parse(); err != nil {
+			panic(err)
+		}
+		NODEForText.Insert(d)
 	}
 }

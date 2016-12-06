@@ -7,28 +7,34 @@ import (
 
 var (
 	NODE           *Node
+	NODEForText    *Node
 	ErrNoSignature = errors.New("No signatures in definition")
 )
 
 type Node struct {
-	Signature []byte
-	Offset    int
-	Extension string
-	Children  []*Node
+	Signature       []byte
+	Offset          int
+	Extension       string
+	Children        []*Node
+	caseInsensitive bool
+}
+
+func NewNode(caseInsensitive bool) *Node {
+	return &Node{caseInsensitive: caseInsensitive}
 }
 
 func (n *Node) Insert(d *Definition) {
-	d = copyDefinition(d)
 	if len(d.Signatures) == 0 {
 		return
 	}
+	d = copyDefinition(d, n.caseInsensitive)
 
 	for {
 		if n.Signature == nil && n.Children == nil {
 			n.Signature = d.Signatures[0].b
 			n.Offset = d.Signatures[0].Offset
 			if len(d.Signatures) > 1 {
-				child := &Node{}
+				child := &Node{caseInsensitive: n.caseInsensitive}
 				n.Children = append(n.Children, child)
 				n = child
 				d.Signatures = d.Signatures[1:]
@@ -43,10 +49,11 @@ func (n *Node) Insert(d *Definition) {
 		// Split edge
 		if i < len(n.Signature) {
 			child := &Node{
-				Signature: n.Signature[i:],
-				Offset:    n.Offset + i,
-				Children:  n.Children,
-				Extension: n.Extension,
+				Signature:       n.Signature[i:],
+				Offset:          n.Offset + i,
+				Children:        n.Children,
+				Extension:       n.Extension,
+				caseInsensitive: n.caseInsensitive,
 			}
 			n.Signature = n.Signature[:i]
 			n.Extension = ""
@@ -59,7 +66,7 @@ func (n *Node) Insert(d *Definition) {
 			if child == nil {
 				d.Signatures[0].b = d.Signatures[0].b[i:]
 				d.Signatures[0].Offset += i
-				child = &Node{}
+				child = &Node{caseInsensitive: n.caseInsensitive}
 				n.Children = append(n.Children, child)
 			}
 			n = child
@@ -71,7 +78,10 @@ func (n *Node) Insert(d *Definition) {
 			d.Signatures = d.Signatures[1:]
 			child := n.findChild(d.Signatures[0])
 			if child == nil {
-				child = &Node{Offset: d.Signatures[0].Offset}
+				child = &Node{
+					Offset:          d.Signatures[0].Offset,
+					caseInsensitive: n.caseInsensitive,
+				}
 				n.Children = append(n.Children, child)
 			}
 			n = child
@@ -80,6 +90,9 @@ func (n *Node) Insert(d *Definition) {
 }
 
 func (n *Node) Match(b []byte) string {
+	if n.caseInsensitive {
+		b = bytes.ToLower(b)
+	}
 	return n.match(b[n.Offset:])
 }
 
@@ -121,14 +134,14 @@ func (n *Node) findChild(s *Signature) *Node {
 	return nil
 }
 
-func copyDefinition(src *Definition) *Definition {
+func copyDefinition(src *Definition, toLower bool) *Definition {
 	return &Definition{
 		Extension:  src.Extension,
-		Signatures: copySignatures(src.Signatures),
+		Signatures: copySignatures(src.Signatures, toLower),
 	}
 }
 
-func copySignatures(src []*Signature) (dst []*Signature) {
+func copySignatures(src []*Signature, toLower bool) (dst []*Signature) {
 	dst = make([]*Signature, len(src))
 	for i, s := range src {
 		dst[i] = &Signature{
@@ -136,6 +149,9 @@ func copySignatures(src []*Signature) (dst []*Signature) {
 			HEX:    s.HEX,
 			String: s.String,
 			b:      s.b,
+		}
+		if toLower {
+			dst[i].b = bytes.ToLower(dst[i].b)
 		}
 	}
 	return
