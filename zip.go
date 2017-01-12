@@ -77,6 +77,8 @@ func detectOfficeX(r io.Reader) string {
 			return "xlsx"
 		case "ppt":
 			return "pptx"
+		case "theme":
+			return "thmx"
 		}
 	}
 	return ""
