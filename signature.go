@@ -137,7 +137,7 @@ var Definitions = []*Definition{
 	{"drw", []*Signature{{HEX: "07"}}},
 	{"skf", []*Signature{{HEX: "07 53 4B 46"}}},
 	{"dtd", []*Signature{{HEX: "07 64 74 32 64 64 74 64"}}},
-	{"db", []*Signature{{HEX: "08"}}},
+	//{"db", []*Signature{{HEX: "08"}}}, // obsolete and no longer supported file format.
 	{"", []*Signature{{HEX: "08 00 45"}}},
 	{"xls", []*Signature{{HEX: "D0 CF 11 E0 A1 B1 1A E1"}, {Offset: 512, HEX: "09 08 10 00 00 06 05 00"}}},
 	{"pcx", []*Signature{{HEX: "0A"}, {Offset: 2, HEX: "01 01"}}},
