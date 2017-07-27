@@ -559,7 +559,7 @@ var Definitions = []*Definition{
 	{"doc", []*Signature{{HEX: "CF 11 E0 A1 B1 1A E1 00"}}},
 	{"dbx", []*Signature{{HEX: "CF AD 12 FE"}}},
 	{"", []*Signature{{HEX: "CF FA ED FE"}}},
-	{"msi", []*Signature{{HEX: "D0 CF 11 E0 A1 B1 1A E1"}}}, // doc, dot, pps, ppt, xla, xls, wiz, ac, adp, apr, db, msc, msg, msi, mtw, opt, pub, qbm, rvt, sou, spo, vsd, wps
+	{"xls", []*Signature{{HEX: "D0 CF 11 E0 A1 B1 1A E1"}}}, // doc, dot, pps, ppt, xla, xls, wiz, ac, adp, apr, db, msc, msg, msi, mtw, opt, pub, qbm, rvt, sou, spo, vsd, wps
 	{"ftr", []*Signature{{HEX: "D2 0A 00 00"}}},
 	{"arl", []*Signature{{HEX: "D4 2A"}}}, // aut
 	{"", []*Signature{{HEX: "D4 C3 B2 A1"}}},
